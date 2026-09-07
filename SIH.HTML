@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>MandiDirect | Farm to buyer marketplace</title>
+	<style>
+		:root { --ink:#1b2922; --muted:#6a786f; --line:#dfe8df; --paper:#f6f8f3; --white:#fff; --green:#176b48; --green-dark:#0e4d35; --mint:#dcefe2; --yellow:#f2b84b; --coral:#e47655; --shadow:0 18px 45px rgba(28,65,45,.09); }
+		* { box-sizing:border-box; margin:0; padding:0; }
+		body { background:var(--paper); color:var(--ink); font-family:Georgia,'Times New Roman',serif; line-height:1.45; }
+		button,input,select { font:inherit; } button { cursor:pointer; }
+		.shell { max-width:1440px; margin:auto; padding:0 34px; }
+		header { background:var(--white); border-bottom:1px solid var(--line); }
+		.nav { height:76px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+		.brand { display:flex; align-items:center; gap:11px; font-size:1.28rem; font-weight:700; letter-spacing:-.03em; }
+		.brand-mark { width:35px; height:35px; display:grid; place-items:center; background:var(--green); color:#fff; border-radius:10px 10px 10px 2px; font-family:Arial,sans-serif; font-size:18px; }
+		.nav-links { display:flex; gap:28px; color:var(--muted); font:700 .85rem Arial,sans-serif; }
+		.nav-links a:first-child { color:var(--green); } .profile { display:flex; align-items:center; gap:10px; font:700 .8rem Arial,sans-serif; }
+		.avatar { width:35px; height:35px; display:grid; place-items:center; border-radius:50%; background:#f2dbc2; color:#8a522f; }
+		main { padding:38px 0 56px; } .eyebrow { color:var(--coral); font:700 .72rem Arial,sans-serif; letter-spacing:.12em; text-transform:uppercase; }
+		h1 { max-width:620px; margin-top:8px; font-size:clamp(2.25rem,4vw,4rem); line-height:1.03; letter-spacing:-.055em; }
+		.intro { display:flex; align-items:end; justify-content:space-between; gap:30px; margin-bottom:30px; } .intro-copy { max-width:690px; color:var(--muted); font:.93rem Arial,sans-serif; } .intro-copy p { margin-top:13px; }
+		.primary { border:0; border-radius:7px; padding:13px 18px; background:var(--green); color:#fff; font:700 .82rem Arial,sans-serif; box-shadow:0 8px 18px rgba(23,107,72,.18); } .primary:hover { background:var(--green-dark); }
+		.metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px; } .metric { min-height:100px; padding:18px 20px; border:1px solid var(--line); border-radius:9px; background:var(--white); }
+		.metric-label { color:var(--muted); font:700 .72rem Arial,sans-serif; text-transform:uppercase; letter-spacing:.07em; } .metric strong { display:block; margin-top:9px; font-size:1.65rem; letter-spacing:-.04em; } .metric small { color:var(--green); font:700 .72rem Arial,sans-serif; }
+		.workspace { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(290px,.75fr); gap:22px; align-items:start; } .panel { border:1px solid var(--line); border-radius:10px; background:var(--white); box-shadow:var(--shadow); }
+		.panel-head { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:21px 24px 17px; border-bottom:1px solid var(--line); } h2 { font-size:1.2rem; letter-spacing:-.025em; } .panel-head span { color:var(--muted); font:.76rem Arial,sans-serif; }
+		.toolbar { display:flex; gap:9px; padding:14px 24px; background:#fbfcf9; border-bottom:1px solid var(--line); } .search { flex:1; min-width:150px; border:1px solid var(--line); border-radius:5px; padding:10px 12px; color:var(--ink); font:.82rem Arial,sans-serif; background:#fff; } select { border:1px solid var(--line); border-radius:5px; padding:0 10px; color:var(--ink); background:#fff; font:.78rem Arial,sans-serif; }
+		.listing { display:grid; grid-template-columns:78px 1fr auto; align-items:center; gap:16px; padding:17px 24px; border-bottom:1px solid #edf1eb; } .listing:last-child { border-bottom:0; } .crop { width:78px; height:70px; display:grid; place-items:center; border-radius:7px; background:#e9f3e6; color:var(--green); font-size:2rem; } .crop.tomato { background:#f7e5dd; color:var(--coral); } .crop.onion { background:#eee7f4; color:#79598d; } .crop.mango { background:#fbefd2; color:#b47b13; }
+		.listing h3 { font-size:1rem; } .listing p,.meta { color:var(--muted); font:.76rem Arial,sans-serif; } .meta { display:flex; flex-wrap:wrap; gap:12px; margin-top:8px; } .status { color:var(--green); font-weight:700; } .price { text-align:right; white-space:nowrap; } .price strong { display:block; font-size:1.1rem; } .price button { margin-top:7px; border:1px solid #b7d8c3; border-radius:5px; padding:7px 11px; background:#f3faf4; color:var(--green); font:700 .7rem Arial,sans-serif; }
+		.side { display:grid; gap:22px; } .demand { padding:20px 22px; } .demand h2 { margin-bottom:4px; } .demand-intro { color:var(--muted); font:.75rem Arial,sans-serif; } .demand-row { margin-top:20px; } .demand-top { display:flex; justify-content:space-between; font:700 .78rem Arial,sans-serif; } .demand-top span:last-child { color:var(--coral); } .bar { height:7px; margin-top:8px; border-radius:10px; background:#ecf0e9; overflow:hidden; } .bar i { display:block; height:100%; border-radius:inherit; background:var(--coral); }
+		.route { padding:21px 22px; background:var(--green-dark); color:#fff; overflow:hidden; position:relative; } .route:after { content:''; position:absolute; width:170px; height:170px; border:1px solid rgba(255,255,255,.15); border-radius:50%; right:-70px; top:-65px; } .route .eyebrow { color:#f1c46b; } .route h2 { margin-top:8px; font-size:1.35rem; } .route p { margin-top:8px; color:#c8ddd0; font:.78rem Arial,sans-serif; } .route-line { display:flex; align-items:center; gap:10px; margin:20px 0 15px; font:700 .74rem Arial,sans-serif; } .route-line b { height:1px; flex:1; background:#82a990; } .route small { color:#c8ddd0; font:.7rem Arial,sans-serif; }
+		.empty { display:none; padding:30px; color:var(--muted); font:.8rem Arial,sans-serif; text-align:center; } dialog { width:min(430px,calc(100% - 32px)); border:0; border-radius:10px; padding:25px; box-shadow:0 25px 80px rgba(0,0,0,.25); color:var(--ink); } dialog::backdrop { background:rgba(16,43,29,.4); } dialog h2 { margin-bottom:6px; } dialog p { color:var(--muted); font:.78rem Arial,sans-serif; margin-bottom:18px; } .form-row { display:grid; gap:6px; margin:12px 0; } .form-row label { font:700 .72rem Arial,sans-serif; } .form-row input { border:1px solid var(--line); border-radius:5px; padding:10px; font:.8rem Arial,sans-serif; } .dialog-actions { display:flex; justify-content:end; gap:8px; margin-top:20px; } .cancel { border:0; padding:10px 14px; background:transparent; color:var(--muted); font:700 .75rem Arial,sans-serif; }
+		@media (max-width:850px) { .shell { padding:0 18px; } .nav-links { display:none; } .intro { display:block; } .intro .primary { margin-top:20px; } .metrics { grid-template-columns:repeat(2,1fr); } .workspace { grid-template-columns:1fr; } }
+		@media (max-width:520px) { main { padding-top:25px; } h1 { font-size:2.4rem; } .metrics { gap:8px; } .metric { padding:14px; min-height:88px; } .metric strong { font-size:1.35rem; } .toolbar { padding:12px; flex-wrap:wrap; } .search { flex-basis:100%; } .listing { grid-template-columns:56px 1fr; gap:11px; padding:15px 13px; } .crop { width:56px; height:56px; font-size:1.5rem; } .price { grid-column:2; text-align:left; display:flex; align-items:center; gap:12px; } .price button { margin-top:0; } }
+	</style>
+</head>
+<body>
+	<header><div class="shell nav"><a class="brand" href="#"><span class="brand-mark">M</span>MandiDirect</a><nav class="nav-links" aria-label="Main navigation"><a href="#market">Marketplace</a><a href="#demand">Demand signals</a><a href="#logistics">Logistics</a></nav><div class="profile"><span>Buyer workspace</span><span class="avatar">RK</span></div></div></header>
+	<main class="shell"
+		<section class="intro"><div class="intro-copy"><div class="eyebrow">Morning market · <span id="market-date"></span></div><h1>Move fresh food with fewer stops.</h1><p>Direct supply from verified farmers and FPOs, matched to today's demand and delivered together.</p></div><button class="primary" id="open-listing">+ Add a listing</button></section>
+		<section class="metrics" aria-label="Marketplace overview"><div class="metric"><span class="metric-label">Active supply</span><strong>248 <small>lots</small></strong><small>+18 since yesterday</small></div><div class="metric"><span class="metric-label">Farmer earnings</span><strong>+23% <small>avg</small></strong><small>vs. local mandi</small></div><div class="metric"><span class="metric-label">Open demand</span><strong>76 <small>orders</small></strong><small>12 need matching</small></div><div class="metric"><span class="metric-label">Avg. delivery</span><strong>18 <small>hrs</small></strong><small>across 14 routes</small></div></section>
+		<div class="workspace"><section class="panel" id="market"><div class="panel-head"><div><h2>Fresh supply near you</h2><span>Verified lots · within 120 km of Bengaluru</span></div><span id="result-count">6 lots</span></div><div class="toolbar"><input class="search" id="search" type="search" placeholder="Search crops, FPOs, or locations" aria-label="Search supply" />
+<select id="crop-filter" aria-label="Filter by crop">
+  <option value="all">All Crops</option>
+  <option value="tomato">Tomato</option>
+  <option value="onion">Onion</option>
+  <option value="mango">Mango</option>
+  <option value="banana">Banana</option>
+  <option value="spinach">Spinach</option>
+  <option value="carrot">Carrot</option>
+</select>
+      <select id="sort" aria-label="Sort supply"><option value="match">Best match</option><option value="price">Lowest price</option><option value="volume">Largest lots</option></select></div><div class="listings" id="listings">
+			<article class="listing" data-search="tomato hosur green valley fpo"><div class="crop tomato">T</div><div><h3>Grade A tomatoes</h3><p>Green Valley FPO · Hosur, 42 km away</p><div class="meta"><span class="status">Ready today</span><span>2.4 tonnes available</span></div></div><div class="price"><strong>Rs 28 / kg</strong><button class="add-cart">Request lot</button></div></article>
+			<article class="listing" data-search="banana chikballapur sri sai growers"><div class="crop mango">B</div><div><h3>Yelakki bananas</h3><p>Sri Sai Growers · Chikkaballapur, 58 km away</p><div class="meta"><span class="status">Harvesting tomorrow</span><span>800 kg available</span></div></div><div class="price"><strong>Rs 52 / kg</strong><button class="add-cart">Request lot</button></div></article>
+			<article class="listing" data-search="onion tumakuru earthroots collective"><div class="crop onion">O</div><div><h3>Red onions</h3><p>EarthRoots Collective · Tumakuru, 71 km away</p><div class="meta"><span class="status">Ready in 2 days</span><span>5 tonnes available</span></div></div><div class="price"><strong>Rs 34 / kg</strong><button class="add-cart">Request lot</button></div></article>
+			<article class="listing" data-search="spinach devanahalli green valley fpo"><div class="crop">S</div><div><h3>Baby spinach</h3><p>Green Valley FPO · Devanahalli, 27 km away</p><div class="meta"><span class="status">Ready today</span><span>180 kg available</span></div></div><div class="price"><strong>Rs 42 / kg</strong><button class="add-cart">Request lot</button></div></article>
+			<article class="listing" data-search="mango kolar ananya farms"><div class="crop mango">M</div><div><h3>Totapuri mangoes</h3><p>Ananya Farms · Kolar, 83 km away</p><div class="meta"><span class="status">Ready today</span><span>1.2 tonnes available</span></div></div><div class="price"><strong>Rs 61 / kg</strong><button class="add-cart">Request lot</button></div></article>
+			<article class="listing" data-search="carrot hosur green valley fpo"><div class="crop">C</div><div><h3>Farm carrots</h3><p>Green Valley FPO · Hosur, 42 km away</p><div class="meta"><span class="status">Ready tomorrow</span><span>640 kg available</span></div></div><div class="price"><strong>Rs 31 / kg</strong><button class="add-cart">Request lot</button></div></article>
+		</div><div class="empty" id="empty">No lots match that search. Try a crop or location.</div></section>
+			<aside class="side"><section class="panel demand" id="demand"><h2>Demand signals</h2><p class="demand-intro">Buyer requests rising in the last 24 hours</p><div class="demand-row"><div class="demand-top"><span>Tomatoes</span><span>+34%</span></div><div class="bar"><i style="width:82%"></i></div></div><div class="demand-row"><div class="demand-top"><span>Leafy greens</span><span>+21%</span></div><div class="bar"><i style="width:64%"></i></div></div><div class="demand-row"><div class="demand-top"><span>Bananas</span><span>+16%</span></div><div class="bar"><i style="width:48%"></i></div></div></section><section class="panel route" id="logistics"><div class="eyebrow">AI route planner</div><h2>12 orders can share one trip.</h2><p>Combining Hosur and Electronic City drops saves 46 km and Rs 1,280 today.</p><div class="route-line"><span>Hosur</span><b></b><span>Electronic City</span></div><small>Recommended departure · 05:40 tomorrow</small></section></aside>
+		</div>
+		<section class="panel" style="margin-top:25px; padding:24px;">
+  <h2>Farmer Incoming Requests</h2>
+  <div id="requests" style="margin-top:20px;">
+    Loading requests...
+  </div>
+</section>
+<section class="panel" style="margin-top:25px; padding:24px;">
+  <h2>🌾 MandiDirect Features</h2>
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; margin-top:20px;">
+
+    <div class="panel">
+      <h3>🛒 Digital Direct Marketplace</h3>
+      <p>Connect farmers directly with consumers, retailers and restaurants.</p>
+    </div>
+
+    <div class="panel">
+      <h3>💰 Fair Price Discovery</h3>
+      <p>View market prices and help farmers choose a better selling price.</p>
+    </div>
+
+    <div class="panel">
+      <h3>📦 Bulk Orders</h3>
+      <p>Combine orders to make direct purchasing more economical.</p>
+    </div>
+
+    <div class="panel">
+      <h3>👨‍🌾 Farmer Cooperatives</h3>
+      <p>Allow small farmers to pool their produce and sell larger quantities.</p>
+    </div>
+
+    <div class="panel">
+      <h3>🔐 Transparent Transactions</h3>
+      <p>Digital payments and receipts reduce hidden commissions and deductions.</p>
+    </div>
+
+    <div class="panel">
+      <h3>🚚 Smart Logistics</h3>
+      <p>Coordinate pickup and delivery from farms to nearby buyers.</p>
+    </div>
+
+    <div class="panel">
+      <h3>📱 Quality & Traceability</h3>
+      <p>Use QR codes to show farm, harvest date and product details.</p>
+    </div>
+
+    <div class="panel">
+      <h3>🤖 AI-Based Demand Prediction</h3>
+      <p>Predict demand and suggest the quantity farmers should sell.</p>
+    </div>
+
+    <div class="panel">
+      <h3>📊 Price Comparison</h3>
+      <p>Compare farmer prices with local market prices.</p>
+    </div>
+
+  </div>
+</section>
+<section class="panel" style="margin-top:25px; padding:24px;">
+  <h2>Fair Price Discovery 💰</h2>
+  <p style="color:#6a786f;">
+    Compare direct farmer prices with market prices and see your savings.
+  </p>
+
+  <div style="margin-top:20px; display:grid; gap:15px;">
+    
+    <div style="padding:18px; border:1px solid #dfe8df; border-radius:12px;">
+      <h3>🍅 Tomatoes</h3>
+      </p>Direct Farmer Price: <strong id="tomato-farmer-price">₹28 / kg</strong>
+      <p>Market Price: <strong id="tomato-market-price">₹40 / kg</strong>
+      <p style="color:#176b48; font-weight:700;">
+Buyer Savings: <span id="tomato-savings">₹12 / kg</span>      </p>
+    </div>
+
+    <div style="padding:18px; border:1px solid #dfe8df; border-radius:12px;">
+      <h3>🧅 Onions</h3>
+      <p>Direct Farmer Price: <strong>₹25 / kg</strong></p>
+      <p>Market Price: <strong id="onion-market-price">₹35 / kg</strong>></p>
+      <p style="color:#176b48; font-weight:700;">
+     Buyer Savings: <span id="onion-savings">₹10 / kg</span></p>
+    </div>
+  </div>
+</section>
+<section class="panel" style="margin-top:25px; padding:24px;">
+  <h2>👨‍🌾 Farmer Dashboard</h2>
+  <p style="color:#6a786f;">
+    Manage your crops and incoming buyer requests.
+  </p>
+
+  <div style="margin-top:20px; display:grid; grid-template-columns:repeat(4,1fr); gap:15px;">
+    
+    <div style="padding:18px; border:1px solid #dfe8df; border-radius:12px;">
+      <h3>🌾 My Listings</h3>
+      <strong id="farmer-listing-count">0</strong>
+      <p style="color:#6a786f;">Active crops</p>
+    </div>
+
+    <div style="padding:18px; border:1px solid #dfe8df; border-radius:12px;">
+      <h3>📦 Available Stock</h3>
+      <strong id="farmer-stock">0 kg</strong>
+      <p style="color:#6a786f;">Total available</p>
+    </div>
+
+    <div style="padding:18px; border:1px solid #dfe8df; border-radius:12px;">
+      <h3>📋 Incoming Requests</h3>
+      <strong id="farmer-request-count">0</strong>
+      <p style="color:#6a786f;">Buyer requests</p>
+    </div>
+<div style="padding:18px; border:1px solid #dfe8df; border-radius:12px;">
+  <h3>💰 Direct Selling Benefit</h3>
+  <strong id="farmer-gain">Loading...</strong>
+  <p style="color:#6a786f;">More earnings than local mandi</p>
+</div>
+  </div>
+</section>
+<section class="panel" style="margin-top:25px; padding:24px;">
+  <h2>🤖 AI Demand Prediction</h2>
+
+  <p style="color:#6a786f;">
+    Predict future crop demand and plan your supply.
+  </p>
+
+  <div style="margin-top:20px; display:grid; gap:15px;">
+
+    <div style="padding:18px; background:#f5faf5; border-radius:12px;">
+      <h3>🍅 Tomato</h3>
+      <p>Expected Demand:
+        <strong id="tomato-demand">Loading...</strong>
+      </p>
+      <p>Recommended Supply:
+        <strong id="tomato-recommended">Loading...</strong>
+      </p>
+    </div>
+
+    <div style="padding:18px; background:#f5faf5; border-radius:12px;">
+      <h3>🧅 Onion</h3>
+      <p>Expected Demand:
+        <strong id="onion-demand">Loading...</strong>
+      </p>
+      <p>Recommended Supply:
+        <strong id="onion-recommended">Loading...</strong>
+      </p>
+    </div>
+
+  </div>
+</section>
+<section class="panel" style="margin-top:25px; padding:24px;">
+  <h2>🛒 Buyer Dashboard</h2>
+  <p style="color:#6a786f;">
+    Track available produce and your purchase requests.
+  </p>
+
+  <div style="margin-top:20px; display:grid; grid-template-columns:repeat(3,1fr); gap:15px;">
+
+    <div style="padding:18px; border:1px solid #dfe8df; border-radius:12px;">
+      <h3>🥕 Available Crops</h3>
+      <strong id="buyer-crop-count">0</strong>
+      <p style="color:#6a786f;">Available lots</p>
+    </div>
+
+    <div style="padding:18px; border:1px solid #dfe8df; border-radius:12px;">
+      <h3>📦 Available Stock</h3>
+      <strong id="buyer-stock">0 kg</strong>
+      <p style="color:#6a786f;">Total produce</p>
+    </div>
+
+    <div style="padding:18px; border:1px solid #dfe8df; border-radius:12px;">
+      <h3>📋 My Requests</h3>
+      <strong id="buyer-request-count">0</strong>
+      <p style="color:#6a786f;">Requests sent</p>
+    </div>
+
+  </div>
+</section>
+<section class="panel" style="margin-top:25px; padding:24px;">
+  <h2>🚚 Delivery Tracking</h2>
+
+  <p style="color:#6a786f;">
+    Track your farmer order delivery status.
+  </p>
+
+  <div style="margin-top:20px; padding:20px; background:#f5faf5; border-radius:12px;">
+    
+    <h3>📦 Order #1</h3>
+
+    <p style="margin-top:10px;">
+      Current Status:
+      <strong id="delivery-status">Pickup Scheduled</strong>
+    </p>
+
+    <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+      <button onclick="setDeliveryStatus('Pickup Scheduled')">
+        📦 Pickup Scheduled
+      </button>
+
+      <button onclick="setDeliveryStatus('In Transit')">
+        🚚 In Transit
+      </button>
+
+      <button onclick="setDeliveryStatus('Delivered')">
+        ✅ Delivered
+      </button>
+    </div>
+
+  </div>
+</section>
+	</main>
+	<dialog id="listing-dialog"><form id="listing-form"><h2>Add a supply listing</h2><p>Share what is ready to move and buyers nearby can find it.</p><div class="form-row"><label for="crop-name">Crop or product</label><input id="crop-name" required placeholder="e.g. Grade A tomatoes" /></div><div class="form-row"><label for="seller">Farm or FPO</label><input id="seller" required placeholder="e.g. Green Valley FPO" /></div><div class="form-row"><label for="location">Location</label><input id="location" required placeholder="e.g. Hosur" /></div><div class="form-row"><label for="quantity">Available quantity</label><input id="quantity" required placeholder="e.g. 2 tonnes" /></div><div class="form-row"><label for="price">Price per kg</label><input id="price" type="number" min="1" required placeholder="e.g. 28" /></div><div class="dialog-actions"><button class="cancel" type="button" id="close-dialog">Cancel</button><button class="primary" type="submit">Publish listing</button></div></form></dialog>
+	<script>
+		const search = document.querySelector('#search');const cropFilter = document.querySelector('#crop-filter'); const listingsElement = document.querySelector('#listings'); const empty = document.querySelector('#empty'); const count = document.querySelector('#result-count'); const dialog = document.querySelector('#listing-dialog'); let listings = [];
+		const cropClasses = { tomato: 'tomato', onion: 'onion', mango: 'mango' };
+		function listingMarkup(listing) {
+  const cropClass = cropClasses[listing.crop] || '';
+
+  return `<article class="listing" data-id="${listing.id}">
+    <div class="crop ${cropClass}">
+      ${listing.name.charAt(0)}
+    </div>
+
+    <div>
+      <h3>${listing.name}</h3>
+      <p>${listing.seller} · ${listing.location}, ${listing.distance} km away</p>
+
+      <div class="meta">
+        <span class="status">${listing.status}</span>
+        <span>${listing.quantity} available</span>
+      </div>
+    </div>
+
+    <div class="price">
+      <strong>Rs ${listing.price} / kg</strong>
+      <br>
+      <small style="color:${listing.price <= 40 ? '#176b48' : '#c0392b'};">
+        ${listing.price <= 40
+          ? `Save Rs ${40 - listing.price} / kg`
+          : `Rs ${listing.price - 40} above market`}
+      </small>
+      <br>
+      <button class="add-cart">Request lot</button>
+    </div>
+  </article>`;
+}
+		function renderListings(items) { listings = items; listingsElement.innerHTML = items.map(listingMarkup).join(''); count.textContent = `${items.length} ${items.length === 1 ? 'lot' : 'lots'}`; empty.style.display = items.length ? 'none' : 'block'; document.querySelectorAll('.add-cart').forEach((button) => button.addEventListener('click', requestLot)); }
+		async function loadListings() { const response = await fetch('/api/listings'); const data = await response.json(); renderListings(data.listings); }
+async function filterListings() {
+  const response = await fetch(`/api/listings?search=${encodeURIComponent(search.value)}`);
+  const data = await response.json();
+
+  const crop = cropFilter.value;
+
+  const filtered = crop === 'all'
+    ? data.listings
+    : data.listings.filter(listing => listing.crop === crop);
+
+  renderListings(filtered);
+}
+
+search.addEventListener('input', filterListings);
+cropFilter.addEventListener('change', filterListings);		async function requestLot(event) { const id = event.target.closest('.listing').dataset.id; const response = await fetch(`/api/listings/${id}/requests`, { method: 'POST' }); if (response.ok) { event.target.textContent = 'Request sent'; event.target.style.background = '#176b48'; event.target.style.color = '#fff'; } }
+		search.addEventListener('input', filterListings); document.querySelector('#open-listing').addEventListener('click', () => dialog.showModal()); document.querySelector('#close-dialog').addEventListener('click', () => dialog.close());
+		document.querySelector('#sort').addEventListener('change', (event) => { const ordered = [...listings].sort((first, second) => event.target.value === 'price' ? first.price - second.price : event.target.value === 'volume' ? parseFloat(second.quantity) - parseFloat(first.quantity) : first.id - second.id); renderListings(ordered); });
+		document.querySelector('#listing-form').addEventListener('submit', async (event) => { event.preventDefault(); const body = { name: document.querySelector('#crop-name').value, seller: document.querySelector('#seller').value, location: document.querySelector('#location').value, quantity: document.querySelector('#quantity').value, price: document.querySelector('#price').value }; const response = await fetch('/api/listings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); if (response.ok) { dialog.close(); event.target.reset(); await loadListings(); } });
+		async function loadRequests() {
+  const response = await fetch('/api/requests');
+  const data = await response.json();
+
+  const requestsElement = document.querySelector('#requests');
+
+  if (!data.requests.length) {
+    requestsElement.innerHTML = '<p>No requests yet.</p>';
+    return;
+  }
+
+  requestsElement.innerHTML = data.requests.map(request => `
+    <div style="padding:15px 0; border-bottom:1px solid #dfe8df;">
+      <strong>${request.name}</strong>
+<div style="margin-top:10px;">
+  <button
+    onclick="updateRequest(${request.id}, 'accepted')"
+    style="margin-right:8px; padding:8px 14px; cursor:pointer;">
+    Accept
+  </button>
+
+  <button
+    onclick="updateRequest(${request.id}, 'rejected')"
+    style="padding:8px 14px; cursor:pointer;">
+    Reject
+  </button>
+</div>
+      <p style="color:#6a786f;">
+        ${request.seller} · ${request.location}
+      </p>
+
+      <p>
+        ${request.quantity} · Rs ${request.price} / kg
+      </p>
+
+      <span style="color:#176b48; font-weight:700;">
+        ${request.status}
+      </span>
+    </div>
+  `).join('');
+}
+async function updateRequest(id, status) {
+  const response = await fetch(`/api/requests/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ status })
+  });
+
+  if (response.ok) {
+    loadRequests();
+  } else {
+    alert('Failed to update request');
+  }
+}
+loadRequests().catch(() => {
+  document.querySelector('#requests').textContent =
+    'Unable to load requests.';
+});
+const today = new Date();
+
+document.querySelector('#market-date').textContent =
+  today.toLocaleDateString('en-IN', {
+    weekday: 'short',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  });
+		loadListings().catch(() => { empty.textContent = 'Backend unavailable. Start the server with node server.js.'; empty.style.display = 'block'; });
+
+async function loadMarketPrices() {
+  const response = await fetch('/api/market-prices');
+  const data = await response.json();
+
+  document.querySelector('#tomato-market-price').textContent =
+    `₹${data.marketPrices.tomato} / kg`;
+    document.querySelector('#onion-market-price').textContent =
+  `₹${data.marketPrices.onion} / kg`;
+const tomatoFarmerPrice = 28;
+const onionFarmerPrice = 25;
+
+document.querySelector('#tomato-savings').textContent =
+  `₹${data.marketPrices.tomato - tomatoFarmerPrice} / kg`;
+
+document.querySelector('#onion-savings').textContent =
+  `₹${data.marketPrices.onion - onionFarmerPrice} / kg`;
+}
+
+loadMarketPrices();
+async function loadFarmerDashboard() {
+  const response = await fetch('/api/stats');
+  const data = await response.json();
+
+  document.querySelector('#farmer-listing-count').textContent =
+    data.activeSupply;
+
+  document.querySelector('#farmer-stock').textContent =
+    `${data.totalAvailableKg} kg`;
+
+  document.querySelector('#farmer-request-count').textContent =
+    data.totalLotRequests;
+}
+
+loadFarmerDashboard();
+async function loadBuyerDashboard() {
+  const response = await fetch('/api/stats');
+  const data = await response.json();
+
+  document.querySelector('#buyer-crop-count').textContent =
+    data.activeSupply;
+
+  document.querySelector('#buyer-stock').textContent =
+    `${data.totalAvailableKg} kg`;
+
+  document.querySelector('#buyer-request-count').textContent =
+    data.totalLotRequests;
+}
+
+loadBuyerDashboard();
+function setDeliveryStatus(status) {
+  document.querySelector('#delivery-status').textContent = status;
+}
+async function loadDemandPrediction() {
+  const response = await fetch('/api/demand-prediction');
+  const data = await response.json();
+
+  document.querySelector('#tomato-demand').textContent =
+    data.demand.tomato.level;
+
+  document.querySelector('#tomato-recommended').textContent =
+    `${data.demand.tomato.recommendedKg} kg`;
+
+  document.querySelector('#onion-demand').textContent =
+    data.demand.onion.level;
+
+  document.querySelector('#onion-recommended').textContent =
+    `${data.demand.onion.recommendedKg} kg`;
+}
+
+loadDemandPrediction();
+async function loadFarmerGain() {
+  const response = await fetch('/api/market-prices');
+  const data = await response.json();
+
+  const marketPrice = data.marketPrices.tomato;
+  const directPrice = 28;
+
+  const gain = marketPrice - directPrice;
+
+  document.querySelector('#farmer-gain').textContent =
+    `+₹${gain} / kg`;
+}
+
+loadFarmerGain()
+	</script>
+</body>
+</html>
